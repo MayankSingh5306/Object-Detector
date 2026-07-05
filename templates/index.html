@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Object Detection</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- ── Sidebar ─────────────────────────────────────── -->
+  <aside class="sidebar">
+    <h2>⚙️ Settings</h2>
+
+    <label>Model</label>
+    <select id="modelSelect">
+      <option value="yolov8n.pt">YOLOv8n — fastest</option>
+      <option value="yolov8s.pt">YOLOv8s — small</option>
+      <option value="yolov8m.pt">YOLOv8m — medium</option>
+      <option value="yolov8l.pt">YOLOv8l — large</option>
+      <option value="yolov8x.pt">YOLOv8x — slowest, most accurate</option>
+    </select>
+
+    <label>Confidence: <span id="confVal">0.25</span></label>
+    <input type="range" id="conf" min="0" max="1" step="0.05" value="0.25" />
+
+    <label>IoU threshold: <span id="iouVal">0.45</span></label>
+    <input type="range" id="iou" min="0" max="1" step="0.05" value="0.45" />
+
+    <label>Frame Skip: <span id="skipVal">5</span></label>
+    <input type="range" id="frameSkip" min="5" max="15" step="1" value="5" />
+
+    <hr />
+
+    <label>Input source</label>
+    <div class="radio-group">
+      <label><input type="radio" name="mode" value="image" checked /> Image</label>
+      <label><input type="radio" name="mode" value="video" /> Video</label>
+    </div>
+  </aside>
+
+  <!--  Main content  -->
+  <main class="content">
+    <header>
+      <h1>🎯 Object Detection</h1>
+      <p class="subtitle">Upload an image or video to run object detection.</p>
+    </header>
+
+    <!-- Image mode -->
+    <section id="imageMode">
+      <div class="upload-area" id="imageDropZone">
+        <p>Drag &amp; drop an image here, or</p>
+        <button class="btn" id="imageBtn" type="button">Browse file</button>
+        <input type="file" id="imageInput" accept="image/*" hidden />
+        <p class="hint">JPG, PNG, BMP, WEBP</p>
+      </div>
+
+      <div id="imagePreviewWrap" hidden>
+        <img id="originalImg" src="" alt="Preview" class="result-img" />
+        <button class="btn btn-primary" id="runImageBtn">▶️ Run Detection</button>
+      </div>
+
+      <div id="imageResultWrap" hidden>
+        <h3>📷 Annotated Result</h3>
+        <img id="annotatedImg" src="" alt="Annotated" class="result-img" />
+
+        <h3>📋 Detected Objects</h3>
+        <table id="imageTable">
+          <thead><tr><th>Class</th><th>Confidence</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Video mode -->
+    <section id="videoMode" hidden>
+
+      <div class="upload-area" id="videoDropZone">
+        <p>Drag &amp; drop a video here, or</p>
+        <button class="btn" id="videoBtn" type="button">Browse file</button>
+        <input type="file" id="videoInput" accept="video/*" hidden />
+        <p class="hint">MP4, AVI, MOV, MKV</p>
+      </div>
+
+      <div id="videoPreviewWrap" hidden>
+        <video id="videoPreview" controls></video>
+        <button class="btn btn-primary" id="runVideoBtn">▶️ Run Detection</button>
+      </div>
+
+      <div id="videoResults" hidden>
+        <h3>📋 Detection Summary</h3>
+        <table id="videoTable">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Max in One Frame</th>
+              <th>Highest Confidence</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Spinner overlay -->
+    <div id="spinner" hidden>
+      <div class="spinner-box">
+        <div class="spinner-ring"></div>
+        <p id="spinnerMsg">Running detection…</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
