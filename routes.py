@@ -4,7 +4,7 @@ import numpy as np
 import tempfile
 import os
 
-from app import limiter
+from extensions import limiter
 from inference import get_model, encode_image_to_base64
 from validators import (
     has_valid_extension, has_valid_magic_bytes,

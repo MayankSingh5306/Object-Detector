@@ -1,3 +1,13 @@
+---
+title: Video Analyser
+emoji: 🎯
+colorFrom: red
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # YOLOv8 Object Detection — Video Analyser
 
 A full-stack object detection web app built with Flask and vanilla HTML/CSS/JS, powered by Ultralytics YOLOv8.

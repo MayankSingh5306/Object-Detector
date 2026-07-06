@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Object Detection</title>
+  <title>Object Analyser</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
@@ -21,8 +21,8 @@
       <option value="yolov8x.pt">YOLOv8x — slowest, most accurate</option>
     </select>
 
-    <label>Confidence: <span id="confVal">0.25</span></label>
-    <input type="range" id="conf" min="0" max="1" step="0.05" value="0.25" />
+    <label>Confidence: <span id="confVal">0.45</span></label>
+    <input type="range" id="conf" min="0" max="1" step="0.05" value="0.45" />
 
     <label>IoU threshold: <span id="iouVal">0.45</span></label>
     <input type="range" id="iou" min="0" max="1" step="0.05" value="0.45" />
@@ -42,7 +42,7 @@
   <!--  Main content  -->
   <main class="content">
     <header>
-      <h1>🎯 Object Detection</h1>
+      <h1>🎯 Object Analyser</h1>
       <p class="subtitle">Upload an image or video to run object detection.</p>
     </header>
 
