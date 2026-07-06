@@ -4,6 +4,7 @@ import numpy as np
 import tempfile
 import os
 
+from app import limiter
 from inference import get_model, encode_image_to_base64
 from validators import (
     has_valid_extension, has_valid_magic_bytes,
@@ -29,6 +30,7 @@ def index():
 
 
 @bp.route("/detect/image", methods=["POST"])
+@limiter.limit("5 per minute")
 def detect_image():
     try:
         file       = request.files.get("image")
@@ -76,6 +78,7 @@ def detect_image():
 
 
 @bp.route("/detect/video", methods=["POST"])
+@limiter.limit("2 per minute")
 def detect_video():
     try:
         file       = request.files.get("video")
