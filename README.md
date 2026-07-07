@@ -1,6 +1,6 @@
 ---
-title: Video Analyser
-emoji: 🎯
+title: Object Detector
+emoji: 🔍
 colorFrom: red
 colorTo: blue
 sdk: docker
@@ -8,7 +8,7 @@ app_port: 7860
 pinned: false
 ---
 
-# YOLOv8 Object Detection — Video Analyser
+# YOLOv8 Object Detection — Object Detector
 
 A full-stack object detection web app built with Flask and vanilla HTML/CSS/JS, powered by Ultralytics YOLOv8.
 
@@ -17,20 +17,22 @@ A full-stack object detection web app built with Flask and vanilla HTML/CSS/JS, 
 - **Image detection** — upload an image, get annotated result with bounding boxes and confidence scores
 - **Video detection** — upload a video, get per-class detection summary across sampled frames
 - **Model selection** — switch between YOLOv8n / s / m / l / x live from the UI
-- **Configurable thresholds** — confidence, IoU, and frame skip sliders
-- **File validation** — checks both file extension and magic bytes before processing
+- **Configurable thresholds** — confidence (0.5–1.0), IoU, and frame skip (video only) sliders
+- **Numbered results** — detected objects listed with index numbers for easy reference- **File validation** — checks both file extension and magic bytes before processing
 - **Memory efficient** — video streamed to disk in 1MB chunks, never fully loaded into RAM
 
 ## Architecture
 
 ```
-Video Analyser/
+Object Detector/
 ├── app.py              # Flask entry point — creates app, registers blueprint
+├── extensions.py       # Shared Flask app + Limiter instance (avoids circular imports)
 ├── routes.py           # HTTP route handlers for /detect/image and /detect/video
 ├── inference.py        # YOLO model loading, caching, and image encoding
 ├── validators.py       # File extension and magic byte validation
 ├── test_validators.py  # pytest unit tests for validation functions
 ├── requirements.txt    # Python dependencies
+├── Dockerfile          # Container build config for Hugging Face Spaces deployment
 ├── README.md           # This file
 ├── .gitignore          # Excludes .pt weights, __pycache__, .pytest_cache from git
 ├── templates/
@@ -41,7 +43,7 @@ Video Analyser/
 ```
 
 **Why split into multiple files?**
-`app.py` is kept as a thin entry point — it only creates the Flask app and registers routes. `routes.py` owns the API layer, `inference.py` owns the ML layer, and `validators.py` owns the security layer. Each can be changed independently — swapping YOLOv8 for a different model only touches `inference.py`, adding a new file type only touches `validators.py`.
+`app.py` is kept as a thin entry point — it only creates the Flask app and registers routes. `extensions.py` holds the shared `Flask` app and `Limiter` instances so both `app.py` and `routes.py` can import them without a circular import (Docker runs `app.py` as `__main__`, which retriggers module loading if `app.py` and `routes.py` import from each other directly). `routes.py` owns the API layer, `inference.py` owns the ML layer, and `validators.py` owns the security layer. Each can be changed independently — swapping YOLOv8 for a different model only touches `inference.py`, adding a new file type only touches `validators.py`.
 
 **Why Flask + vanilla JS over Streamlit?**
 Streamlit abstracts away HTTP, API design, and frontend fundamentals. Flask with vanilla JS demonstrates full-stack understanding — the browser talks to the backend via explicit `fetch()` calls, the backend returns structured JSON, and the frontend renders it. Every layer is visible and intentional.

@@ -4,6 +4,7 @@ const iouSlider   = document.getElementById("iou");
 const confVal     = document.getElementById("confVal");
 const iouVal      = document.getElementById("iouVal");
 const frameSkipSlider = document.getElementById("frameSkip");
+const frameSkipGroup = document.getElementById("frameSkipGroup");
 const skipVal     = document.getElementById("skipVal");
 const modelSelect = document.getElementById("modelSelect");
 const imageSection = document.getElementById("imageMode");
@@ -42,6 +43,7 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
     const isImage = radio.value === "image";
     imageSection.hidden = !isImage;
     videoSection.hidden =  isImage;
+    frameSkipGroup.hidden = isImage;
   });
 });
 
@@ -126,11 +128,11 @@ runImageBtn.addEventListener("click", async () => {
 
     imageTableBody.innerHTML = "";
     if (data.detections.length === 0) {
-      imageTableBody.innerHTML = `<tr><td colspan="2">No objects detected above threshold.</td></tr>`;
+      imageTableBody.innerHTML = `<tr><td colspan="3">No objects detected above threshold.</td></tr>`;
     } else {
-      data.detections.forEach(d => {
+      data.detections.forEach((d, i) => {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${d.class}</td><td>${d.confidence}</td>`;
+        tr.innerHTML = `<td>${i + 1}</td><td>${d.class}</td><td>${d.confidence}</td>`;
         imageTableBody.appendChild(tr);
       });
     }
@@ -193,11 +195,11 @@ runVideoBtn.addEventListener("click", async () => {
 
     videoTableBody.innerHTML = "";
     if (data.summary.length === 0) {
-      videoTableBody.innerHTML = `<tr><td colspan="3">No objects detected above threshold.</td></tr>`;
+      videoTableBody.innerHTML = `<tr><td colspan="4">No objects detected above threshold.</td></tr>`;
     } else {
-      data.summary.forEach(row => {
+      data.summary.forEach((row, i) => {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${row.class}</td><td>${row.max_in_frame}</td><td>${row.max_conf}</td>`;
+        tr.innerHTML = `<td>${i + 1}</td><td>${row.class}</td><td>${row.max_in_frame}</td><td>${row.max_conf}</td>`;
         videoTableBody.appendChild(tr);
       });
     }
